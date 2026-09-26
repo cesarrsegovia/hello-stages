@@ -4,7 +4,7 @@ const { URL } = require("node:url");
 const PORT = Number(process.env.PORT || 3000);
 const STAGE = process.env.APP_STAGE || "local";
 const VERSION = process.env.APP_VERSION || "0.1.0";
-const PROJECT_NAME = "Hello Stages base";
+const PROJECT_NAME = "Hello Stages con saludo";
 
 function sendJson(res, status, data) {
   res.writeHead(status, { "Content-Type": "application/json; charset=utf-8" });
@@ -22,6 +22,15 @@ function handler(req, res) {
       version: VERSION
     });
   }
+  if (url.pathname === "/saludo") {
+    const nombre = (url.searchParams.get("nombre") || "mundo").trim();
+    return sendJson(res, 200, {
+      feature: "saludo-personalizado",
+      mensaje: `Hola, ${nombre || "mundo"}!`,
+      stage: STAGE
+    });
+  }
+
 
   return sendJson(res, 404, { error: "Ruta no encontrada" });
 }
